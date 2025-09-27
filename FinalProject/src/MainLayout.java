@@ -26,20 +26,23 @@ public class MainLayout extends BorderPane {
 		
 		// Simple form to input a starting point for the chart
 		// TODO: Draw the chart
-		Label lblStartYear = new Label("Start Year:");
+		Label lblStartYear = new Label(startYearText());
 		TextField tfdStartYear = new TextField();
 		Label lblDataFile = new Label("Data File:");
 		TextField tfdDataFile = new TextField();
-		
 		// Submit button updates the chart
 		Button btnUpdateChart = new Button("Update Chart");
+		
+		// Chart is updated and the start year is displayed
 		btnUpdateChart.setOnAction(event -> {
 			// All Date years must be offset by 1900
 			Date start = new Date(
 				Integer.parseInt(tfdStartYear.getText()) - 1900, 0, 1);
+			
 			chart = new Chart(
 				new TimeFrame(start, new Date(), tfdDataFile.getText()));
 			
+			lblStartYear.setText(startYearText());
 			tfdStartYear.setStyle("-fx-background-color: lightgray");
 			tfdDataFile.setStyle("-fx-background-color: lightgray");
 		});
@@ -48,11 +51,16 @@ public class MainLayout extends BorderPane {
 		VBox vbx = new VBox();
 		vbx.getChildren().addAll(lblStartYear, tfdStartYear,
 			lblDataFile, tfdDataFile, btnUpdateChart);
+		
 		vbx.setSpacing(4);
-
 		// Inline style to make the UI look cleaner
 		this.setStyle("-fx-padding: 16px;");
 		this.setTop(lblTitle);
 		this.setLeft(vbx);
+	}
+	
+	private String startYearText() {
+		return "Start Year: " +
+			(chart.getTimeFrame().getBegin().getYear() + 1900);
 	}
 }
