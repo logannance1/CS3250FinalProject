@@ -1,21 +1,37 @@
 import java.util.ArrayList;
-import java.util.Date;
 
-public class Chart {
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+
+public class Chart extends Pane {
 	private TimeFrame timeFrame;
 	private ArrayList<Indicator> indicators = new ArrayList<Indicator>();
+	protected int height = 400;
 	
+	/**
+	 * Creates a blank chart
+	 */
 	public Chart() {
-		this.timeFrame = new TimeFrame(new Date(100, 0, 1), new Date(), "");
+		// TODO Adjust width and height based on window size
+		this.setPrefSize(800, height);
+		this.setBackground(new Background(new BackgroundFill(
+			Color.WHITE, null, null)));
 	}
 	
+	/**
+	 * Creates a chart with a TimeFrame
+	 * @param timeFrame
+	 */
 	public Chart(TimeFrame timeFrame) {
-		System.out.println(timeFrame.getBegin());
+		this.setPrefSize(800, height);
+		this.setBackground(new Background(new BackgroundFill(
+				Color.WHITE, null, null)));
+		
 		this.timeFrame = timeFrame;
 	}
 	
-	public void draw() {}
-
 	public TimeFrame getTimeFrame() {
 		return timeFrame;
 	}

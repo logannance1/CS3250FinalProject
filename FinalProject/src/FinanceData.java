@@ -5,7 +5,7 @@ public class FinanceData {
 	private double high;
 	private double low;
 	
-	public FinanceData(double open, double close, double high, double low) {
+	public FinanceData(double open, double high, double low, double close) {
 		this.open = open;
 		this.close = close;
 		this.high = high;
@@ -42,5 +42,11 @@ public class FinanceData {
 
 	public void setLow(double low) {
 		this.low = low;
+	}
+	
+	@Override
+	public String toString() {
+		return "open: " + open + ", high: " + high + ", low: " + low +
+			", close: " + close;
 	}
 }
