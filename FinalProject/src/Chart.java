@@ -4,11 +4,13 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
 
 public class Chart extends Pane {
 	private TimeFrame timeFrame;
 	private ArrayList<Indicator> indicators = new ArrayList<Indicator>();
-	protected int height = 400;
+	private Line xAxis, yAxis;
+	private int height = 400;
 	
 	/**
 	 * Creates a blank chart
@@ -34,6 +36,11 @@ public class Chart extends Pane {
 	
 	public TimeFrame getTimeFrame() {
 		return timeFrame;
+	}
+	
+	public void draw() {
+		this.getChildren().clear();
+		
 	}
 
 	public void setTimeFrame(TimeFrame timeFrame) {

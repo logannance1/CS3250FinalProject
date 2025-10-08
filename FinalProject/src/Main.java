@@ -12,6 +12,7 @@ public class Main extends Application {
 		// Creates a scene with a MainLayout and default sizing
 		Scene scene = new Scene(new MainLayout(), 800, 600);
 		scene.getStylesheets().add("styles/style.css");
+
 		primaryStage.setScene(scene);
 		primaryStage.setTitle("Financial Visualizer");
 		primaryStage.show();

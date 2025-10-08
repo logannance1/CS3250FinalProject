@@ -16,7 +16,7 @@ public class MainLayout extends GridPane {
 	 * Creates a new MainLayout with a CandlestickChart
 	 */
 	public MainLayout() {
-		chart = new CandlestickChart();
+		chart = new CandleChart();
 		this.add(chart, 0, 0);
 		this.add(new DataForm(chart), 0, 1);
 	}
