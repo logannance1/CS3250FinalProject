@@ -8,7 +8,7 @@ import com.opencsv.CSVReader;
 public class TimeFrame {
 	private Date begin;
 	private Date end;
-	private ArrayList<FinanceData> data;
+	private ArrayList<FinanceDatum> data;
 	
 	/**
 	 * Creates a new TimeFrame and loads the data from the file
@@ -39,15 +39,15 @@ public class TimeFrame {
 		this.end = end;
 	}
 
-	public ArrayList<FinanceData> getData() {
+	public ArrayList<FinanceDatum> getData() {
 		return data;
 	}
 	
-	public void appendData(FinanceData data) {
+	public void appendDatum(FinanceDatum data) {
 		this.data.add(data);
 	}
 	
-	public FinanceData removeData() {
+	public FinanceDatum removeDatum() {
 		return this.data.removeLast();
 	}
 	
@@ -57,7 +57,7 @@ public class TimeFrame {
 	 * @param path
 	 */
 	private void loadData(String path) {
-		data = new ArrayList<FinanceData>(21);
+		data = new ArrayList<FinanceDatum>(21);
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		
 		try (CSVReader reader = new CSVReader(new FileReader(path))) {
@@ -70,16 +70,12 @@ public class TimeFrame {
 				Date date = format.parse(dateStr);
 				
 				if (!date.before(begin) && !date.after(end)) {
-					FinanceData day = new FinanceData(
+					FinanceDatum day = new FinanceDatum(
+						date,
 						Double.parseDouble(row[1]),
 						Double.parseDouble(row[2]),
 						Double.parseDouble(row[3]),
-						Double.parseDouble(row[4])
-					);
-					
-					// For testing purposes
-					System.out.println(day);
-					
+						Double.parseDouble(row[4]));
 					data.add(day);
 				}
 			}

@@ -1,23 +1,24 @@
 import java.util.ArrayList;
 
+import javafx.scene.control.Label;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Line;
 
 public class Chart extends Pane {
 	private TimeFrame timeFrame;
 	private ArrayList<Indicator> indicators = new ArrayList<Indicator>();
-	private Line xAxis, yAxis;
-	private int height = 400;
+	// TODO Update these when the window size changes
+	private int width = 800, height = 400;
 	
 	/**
 	 * Creates a blank chart
 	 */
 	public Chart() {
 		// TODO Adjust width and height based on window size
-		this.setPrefSize(800, height);
+		this.setPrefSize(width, height);
 		this.setBackground(new Background(new BackgroundFill(
 			Color.WHITE, null, null)));
 	}
@@ -27,11 +28,8 @@ public class Chart extends Pane {
 	 * @param timeFrame
 	 */
 	public Chart(TimeFrame timeFrame) {
-		this.setPrefSize(800, height);
-		this.setBackground(new Background(new BackgroundFill(
-				Color.WHITE, null, null)));
-		
-		this.timeFrame = timeFrame;
+		this();
+		setTimeFrame(timeFrame);
 	}
 	
 	public TimeFrame getTimeFrame() {
@@ -40,7 +38,6 @@ public class Chart extends Pane {
 	
 	public void draw() {
 		this.getChildren().clear();
-		
 	}
 
 	public void setTimeFrame(TimeFrame timeFrame) {

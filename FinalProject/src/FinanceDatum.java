@@ -1,15 +1,28 @@
+import java.util.Date;
 
-public class FinanceData {
+public class FinanceDatum {
+	private Date date;
 	private double open;
 	private double close;
 	private double high;
 	private double low;
 	
-	public FinanceData(double open, double high, double low, double close) {
+	public FinanceDatum(Date date, double open, double high, double low,
+		double close)
+	{
+		this.date = date;
 		this.open = open;
 		this.close = close;
 		this.high = high;
 		this.low = low;
+	}
+
+	public Date getDate() {
+		return date;
+	}
+
+	public void setDate(Date date) {
+		this.date = date;
 	}
 
 	public double getOpen() {
