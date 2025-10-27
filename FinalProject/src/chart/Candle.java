@@ -1,9 +1,14 @@
+package chart;
+import data.FinanceDatum;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 
 public class Candle {
 	private FinanceDatum datum;
+	private Line wick;
+	private Rectangle body;
 	private double x;
 
 	public Candle(FinanceDatum datum) {
@@ -17,6 +22,10 @@ public class Candle {
 	public double getX() {
 		return x;
 	}
+	
+	public Line getWick() {
+		return wick;
+	}
 
 	public void setDatum(FinanceDatum datum) {
 		this.datum = datum;
@@ -28,19 +37,20 @@ public class Candle {
 	 * @param candle
 	 * @param x
 	 */
-	public void draw(CandleChart chart, double space, double x) {
+	public void draw(CandleChart chart, double space, double x, double scale) {
 		// TODO Allow the user to adjust these values
 		this.x = x;
-		double width = space * 0.75;
-		double scale = 64;
+		
+		double width = space *.75;
 		double yHigh = chart.getHeight() - datum.getHigh() * scale;
 		double yClose = chart.getHeight() - datum.getClose() * scale;
 		double yOpen = chart.getHeight() - datum.getOpen() * scale;
 		double yLow = chart.getHeight() - datum.getLow() * scale;
 
-		Line wick = new Line(x, yHigh, x, yLow);
-		Rectangle body = new Rectangle(x - width / 2, Math.min(yOpen, yClose),
+		wick = new Line(x, yHigh, x, yLow);
+		body = new Rectangle(x - width / 2, Math.min(yOpen, yClose),
 			width, Math.abs(yClose - yOpen));
+		
 		Color color = datum.getClose() >= datum.getOpen() ? Color.GREEN :
 			Color.RED;
 

@@ -1,11 +1,19 @@
+package chart;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
+import data.TimeFrame;
 import javafx.application.Platform;
 import javafx.scene.control.Label;
 
 public class CandleChart extends Chart {
+	private double space;
 	private ArrayList<Candle> candles;
+
+	public CandleChart(XAxis xAxis, YAxis yAxis) {
+		super(xAxis, yAxis);
+	}
 	
 	public ArrayList<Candle> getCandles() {
 		return this.candles;
@@ -23,6 +31,7 @@ public class CandleChart extends Chart {
 			candles.add(new Candle(timeFrame.getData().get(i)));
 		}
 		
+		space = this.getWidth() / (candles.size() + 1);
 		draw();
 	}
 	
@@ -32,17 +41,55 @@ public class CandleChart extends Chart {
 	@Override
 	public void draw() {
 		super.draw();
-		double space = (this.getWidth() - 50) / candles.size();
+		drawFirstCandle();
 		
-		for (int i = 0; i < candles.size(); ++i) {
-			candles.get(i).draw(this, space, space * (i + 0.5) + 25);
+		for (int i = 1; i < candles.size(); ++i) {
+			drawNonFirstCandle(i);
 		}
 		
-		drawXAxis();
+//		drawXAxis();
+	}
+	
+	private void drawFirstCandle() {
+		double x = space;
+		Candle candle = candles.get(0);
+		Date date = candle.getDatum().getDate();
+		SimpleDateFormat sdf = new SimpleDateFormat("MMM");
+		String month = sdf.format(date);
+
+		Label label = new Label(month);
+
+		Platform.runLater(() -> {
+			label.setLayoutX(x + label.getWidth() / 2);
+		});
+
+		xAxis.getChildren().add(label);
+		candle.draw(this, space, x, 64);
+	}
+	
+	private void drawNonFirstCandle(int i) {
+		Candle candle = candles.get(i);
+		Date date = candle.getDatum().getDate();
+		double x = space * (i + 1);
+		int prevMonth = candles.get(i - 1).getDatum().getDate().getMonth();
+		
+		if (date.getMonth() >= (prevMonth + 1) % 12) {
+			SimpleDateFormat sdf = new SimpleDateFormat("MMM");
+			String month = sdf.format(date);
+			Label label = new Label(month);
+
+			Platform.runLater(() -> {
+				label.setLayoutX(x + label.getWidth() / 2);
+			});
+			
+			xAxis.getChildren().add(label);
+		}
+		
+		candle.draw(this, space, x, 64);
 	}
 	
 	// TODO Position x-axis with layout nodes instead of hard-coded positions
-	private void drawXAxis() {	
+	private void drawXAxis() {
 		final int numCandles = candles.size();
 		
 		// Placement of x-axis labels
@@ -67,5 +114,7 @@ public class CandleChart extends Chart {
 			label.setLayoutY(this.getHeight() - 25);
 			this.getChildren().add(label);
 		}
-	}	
+	}
+	
+
 }

@@ -1,3 +1,5 @@
+package misc;
+import chart.Chart;
 
 public abstract class Indicator {
 	private Chart chart;

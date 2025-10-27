@@ -1,3 +1,4 @@
+package data;
 import java.io.FileReader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -76,6 +77,7 @@ public class TimeFrame {
 						Double.parseDouble(row[2]),
 						Double.parseDouble(row[3]),
 						Double.parseDouble(row[4]));
+
 					data.add(day);
 				}
 			}

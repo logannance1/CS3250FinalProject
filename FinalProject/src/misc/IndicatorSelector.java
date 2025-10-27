@@ -1,3 +1,4 @@
+package misc;
 
 public class IndicatorSelector {
 	private Indicator[] indicators = { new SMA(null), new EMA(null) };

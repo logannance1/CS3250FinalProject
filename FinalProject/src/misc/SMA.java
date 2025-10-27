@@ -1,3 +1,5 @@
+package misc;
+import chart.Chart;
 
 public class SMA extends Indicator {
 	public SMA(Chart chart) {

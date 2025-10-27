@@ -1,5 +1,7 @@
+package data;
 import java.text.SimpleDateFormat;
 
+import chart.Chart;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;

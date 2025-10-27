@@ -1,3 +1,6 @@
+package misc;
+import chart.Chart;
+
 public class EMA extends Indicator {
 	public EMA(Chart chart) {
 		super(chart);
