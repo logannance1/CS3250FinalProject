@@ -1,4 +1,10 @@
-
+/*
+ * TODO
+ * Maximum chart density.
+ * Chart scrolling.
+ * Y axis.
+ * Ticker dropdowns
+ */
 import Main.MainLayout;
 import javafx.application.Application;
 import javafx.scene.Scene;

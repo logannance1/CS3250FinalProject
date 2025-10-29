@@ -3,13 +3,17 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import data.FinanceDatum;
 import data.TimeFrame;
 import javafx.application.Platform;
 import javafx.scene.control.Label;
 
 public class CandleChart extends Chart {
+	private double scaleX = 64;
+	private double scaleY;
 	private double space;
 	private ArrayList<Candle> candles;
+	private static final double MIN_SCALE = 12;
 
 	public CandleChart(XAxis xAxis, YAxis yAxis) {
 		super(xAxis, yAxis);
@@ -26,12 +30,17 @@ public class CandleChart extends Chart {
 	public void setTimeFrame(TimeFrame timeFrame) {
 		super.setTimeFrame(timeFrame);
 		candles = new ArrayList<Candle>(timeFrame.getData().size());
+		FinanceDatum fd = timeFrame.getData().get(0);
+		double min = fd.getLow();
+		double max = fd.getHigh();
+		candles.add(new Candle(fd));
 		
-		for (int i = 0; i < timeFrame.getData().size(); ++i) {
+		for (int i = 1; i < timeFrame.getData().size(); ++i) {
+			
 			candles.add(new Candle(timeFrame.getData().get(i)));
 		}
 		
-		space = this.getWidth() / (candles.size() + 1);
+		space = Math.max(this.getWidth() / (candles.size() + 1), MIN_SPACE);
 		draw();
 	}
 	
@@ -46,8 +55,6 @@ public class CandleChart extends Chart {
 		for (int i = 1; i < candles.size(); ++i) {
 			drawNonFirstCandle(i);
 		}
-		
-//		drawXAxis();
 	}
 	
 	private void drawFirstCandle() {
@@ -64,7 +71,7 @@ public class CandleChart extends Chart {
 		});
 
 		xAxis.getChildren().add(label);
-		candle.draw(this, space, x, 64);
+		candle.draw(this, space, x, scale);
 	}
 	
 	private void drawNonFirstCandle(int i) {
@@ -85,7 +92,7 @@ public class CandleChart extends Chart {
 			xAxis.getChildren().add(label);
 		}
 		
-		candle.draw(this, space, x, 64);
+		candle.draw(this, space, x, scale);
 	}
 	
 	// TODO Position x-axis with layout nodes instead of hard-coded positions

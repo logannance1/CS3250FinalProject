@@ -37,15 +37,15 @@ public class Candle {
 	 * @param candle
 	 * @param x
 	 */
-	public void draw(CandleChart chart, double space, double x, double scale) {
+	public void draw(CandleChart chart, double space, double x, double scaleX, double scaleY) {
 		// TODO Allow the user to adjust these values
 		this.x = x;
 		
-		double width = space *.75;
-		double yHigh = chart.getHeight() - datum.getHigh() * scale;
-		double yClose = chart.getHeight() - datum.getClose() * scale;
-		double yOpen = chart.getHeight() - datum.getOpen() * scale;
-		double yLow = chart.getHeight() - datum.getLow() * scale;
+		double width = space * .75 * scaleX;
+		double yHigh = chart.getHeight() - datum.getHigh() * scaleY;
+		double yClose = chart.getHeight() - datum.getClose() * scaleY;
+		double yOpen = chart.getHeight() - datum.getOpen() * scaleY;
+		double yLow = chart.getHeight() - datum.getLow() * scaleY;
 
 		wick = new Line(x, yHigh, x, yLow);
 		body = new Rectangle(x - width / 2, Math.min(yOpen, yClose),
