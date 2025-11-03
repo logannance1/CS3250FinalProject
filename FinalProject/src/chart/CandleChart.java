@@ -9,11 +9,11 @@ import javafx.application.Platform;
 import javafx.scene.control.Label;
 
 public class CandleChart extends Chart {
-	private double scaleX = 64;
-	private double scaleY;
+	private double scaleX = 1;
+	private double scaleY = 64;
 	private double space;
 	private ArrayList<Candle> candles;
-	private static final double MIN_SCALE = 12;
+	private static final double MIN_SPACE = 32;
 
 	public CandleChart(XAxis xAxis, YAxis yAxis) {
 		super(xAxis, yAxis);
@@ -36,11 +36,26 @@ public class CandleChart extends Chart {
 		candles.add(new Candle(fd));
 		
 		for (int i = 1; i < timeFrame.getData().size(); ++i) {
+			fd = timeFrame.getData().get(i);
 			
-			candles.add(new Candle(timeFrame.getData().get(i)));
+			if (fd.getHigh() > max) {
+				max = fd.getHigh();
+			}
+			
+			if (fd.getLow() < min) {
+				min = fd.getLow();
+			}
+
+			candles.add(new Candle(fd));
 		}
 		
-		space = Math.max(this.getWidth() / (candles.size() + 1), MIN_SPACE);
+		// this.getHeight() == max * scale;
+		// 0 == min;
+//		scaleY = this.getHeight() / max;
+		scaleY = 32;
+		
+		System.out.println("Max: " + max + ", Min: " + min + ", Scale: " + scaleY);
+		space = Math.min(MIN_SPACE, this.getWidth() / (candles.size() + 1));
 		draw();
 	}
 	
@@ -71,7 +86,7 @@ public class CandleChart extends Chart {
 		});
 
 		xAxis.getChildren().add(label);
-		candle.draw(this, space, x, scale);
+		candle.draw(this, space, x, scaleX, scaleY);
 	}
 	
 	private void drawNonFirstCandle(int i) {
@@ -92,7 +107,7 @@ public class CandleChart extends Chart {
 			xAxis.getChildren().add(label);
 		}
 		
-		candle.draw(this, space, x, scale);
+		candle.draw(this, space, x, scaleX, scaleY);
 	}
 	
 	// TODO Position x-axis with layout nodes instead of hard-coded positions

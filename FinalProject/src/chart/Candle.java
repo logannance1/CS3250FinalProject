@@ -37,11 +37,10 @@ public class Candle {
 	 * @param candle
 	 * @param x
 	 */
-	public void draw(CandleChart chart, double space, double x, double scaleX, double scaleY) {
-		// TODO Allow the user to adjust these values
+	public void draw(CandleChart chart, double space, double x, double min, double scaleY) {
 		this.x = x;
 		
-		double width = space * .75 * scaleX;
+		double width = space * .75 * 64;
 		double yHigh = chart.getHeight() - datum.getHigh() * scaleY;
 		double yClose = chart.getHeight() - datum.getClose() * scaleY;
 		double yOpen = chart.getHeight() - datum.getOpen() * scaleY;
