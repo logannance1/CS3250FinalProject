@@ -40,11 +40,11 @@ public class Candle {
 	public void draw(CandleChart chart, double space, double x, double min, double scaleY) {
 		this.x = x;
 		
-		double width = space * .75 * 64;
-		double yHigh = chart.getHeight() - datum.getHigh() * scaleY;
-		double yClose = chart.getHeight() - datum.getClose() * scaleY;
-		double yOpen = chart.getHeight() - datum.getOpen() * scaleY;
-		double yLow = chart.getHeight() - datum.getLow() * scaleY;
+		double width = space * .75;
+		double yHigh = chart.getHeight() - (datum.getHigh() - min) * scaleY;
+		double yClose = chart.getHeight() - (datum.getClose() - min) * scaleY;
+		double yOpen = chart.getHeight() - (datum.getOpen() - min) * scaleY;
+		double yLow = chart.getHeight() - (datum.getLow() - min) * scaleY;
 
 		wick = new Line(x, yHigh, x, yLow);
 		body = new Rectangle(x - width / 2, Math.min(yOpen, yClose),

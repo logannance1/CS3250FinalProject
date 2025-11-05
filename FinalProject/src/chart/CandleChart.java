@@ -9,8 +9,8 @@ import javafx.application.Platform;
 import javafx.scene.control.Label;
 
 public class CandleChart extends Chart {
-	private double scaleX = 1;
-	private double scaleY = 64;
+	private double scale = 64;
+	private double min;
 	private double space;
 	private ArrayList<Candle> candles;
 	private static final double MIN_SPACE = 32;
@@ -50,12 +50,11 @@ public class CandleChart extends Chart {
 		}
 		
 		// this.getHeight() == max * scale;
-		// 0 == min;
 //		scaleY = this.getHeight() / max;
-		scaleY = 32;
+		scale = 64;
 		
-		System.out.println("Max: " + max + ", Min: " + min + ", Scale: " + scaleY);
-		space = Math.min(MIN_SPACE, this.getWidth() / (candles.size() + 1));
+		System.out.println("Max: " + max + ", Min: " + min + ", Scale: " + scale);
+		space = Math.max(MIN_SPACE, this.getWidth() / (candles.size() + 1));
 		draw();
 	}
 	
@@ -86,7 +85,7 @@ public class CandleChart extends Chart {
 		});
 
 		xAxis.getChildren().add(label);
-		candle.draw(this, space, x, scaleX, scaleY);
+		candle.draw(this, space, x, min, scale);
 	}
 	
 	private void drawNonFirstCandle(int i) {
@@ -107,7 +106,7 @@ public class CandleChart extends Chart {
 			xAxis.getChildren().add(label);
 		}
 		
-		candle.draw(this, space, x, scaleX, scaleY);
+		candle.draw(this, space, x, min, scale);
 	}
 	
 	// TODO Position x-axis with layout nodes instead of hard-coded positions
