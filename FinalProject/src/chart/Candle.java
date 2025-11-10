@@ -45,6 +45,9 @@ public class Candle {
 		double yClose = chart.getHeight() - (datum.getClose() - min) * scaleY;
 		double yOpen = chart.getHeight() - (datum.getOpen() - min) * scaleY;
 		double yLow = chart.getHeight() - (datum.getLow() - min) * scaleY;
+		
+		System.out.println(yLow);
+		System.out.println(chart.getHeight());
 
 		wick = new Line(x, yHigh, x, yLow);
 		body = new Rectangle(x - width / 2, Math.min(yOpen, yClose),

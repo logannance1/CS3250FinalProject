@@ -48,12 +48,13 @@ public class CandleChart extends Chart {
 
 			candles.add(new Candle(fd));
 		}
-		
-		// this.getHeight() == max * scale;
-//		scaleY = this.getHeight() / max;
-		scale = 64;
-		
-		System.out.println("Max: " + max + ", Min: " + min + ", Scale: " + scale);
+
+		// height = (max - min) * scale
+		// scale = height / (max-min)
+//		scale = this.getHeight() / (max - min);
+		scale = 75;
+		System.out.println(scale);
+		System.out.println("min: " + min);
 		space = Math.max(MIN_SPACE, this.getWidth() / (candles.size() + 1));
 		draw();
 	}
