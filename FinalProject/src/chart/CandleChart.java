@@ -31,7 +31,7 @@ public class CandleChart extends Chart {
 		super.setTimeFrame(timeFrame);
 		candles = new ArrayList<Candle>(timeFrame.getData().size());
 		FinanceDatum fd = timeFrame.getData().get(0);
-		double min = fd.getLow();
+		min = fd.getLow();
 		double max = fd.getHigh();
 		candles.add(new Candle(fd));
 		
@@ -45,17 +45,13 @@ public class CandleChart extends Chart {
 			if (fd.getLow() < min) {
 				min = fd.getLow();
 			}
-
+			
 			candles.add(new Candle(fd));
 		}
 
-		// height = (max - min) * scale
-		// scale = height / (max-min)
-//		scale = this.getHeight() / (max - min);
-		scale = 75;
-		System.out.println(scale);
-		System.out.println("min: " + min);
+		scale = this.getHeight() / (max - min);
 		space = Math.max(MIN_SPACE, this.getWidth() / (candles.size() + 1));
+		System.out.println("Draw");
 		draw();
 	}
 	
@@ -107,6 +103,7 @@ public class CandleChart extends Chart {
 			xAxis.getChildren().add(label);
 		}
 		
+		System.out.println(min);
 		candle.draw(this, space, x, min, scale);
 	}
 	
