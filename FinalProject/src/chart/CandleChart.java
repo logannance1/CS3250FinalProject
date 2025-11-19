@@ -33,6 +33,7 @@ public class CandleChart extends Chart {
 		FinanceDatum fd = timeFrame.getData().get(0);
 		min = fd.getLow();
 		double max = fd.getHigh();
+
 		candles.add(new Candle(fd));
 		
 		for (int i = 1; i < timeFrame.getData().size(); ++i) {
@@ -48,7 +49,7 @@ public class CandleChart extends Chart {
 			
 			candles.add(new Candle(fd));
 		}
-
+		
 		scale = (this.getHeight()) / (max - min);
 		space = Math.max(MIN_SPACE, this.getWidth() / (candles.size() + 1));
 		System.out.println("Draw");

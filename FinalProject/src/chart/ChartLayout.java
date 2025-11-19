@@ -1,7 +1,6 @@
 package chart;
-import javafx.geometry.Insets;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Pane;
 
 /**
  * MainLayout consits of a Chart, IndicatorSelector, and ErrorHandler.
@@ -19,15 +18,17 @@ public class ChartLayout extends BorderPane {
 	public ChartLayout() {
 		xAxis = new XAxis();
 		yAxis = new YAxis();
-		
-		Pane pane = new Pane();
-		pane.setPadding(new Insets(8));
 		chart = new CandleChart(xAxis, yAxis);
-		pane.getChildren().add(chart);
+		var chartScroll = new ScrollPane(chart);
+		chartScroll.setFitToHeight(true);
 
+		chartScroll.setFitToWidth(false);
+		chartScroll.setPannable(true);
+		chartScroll.setStyle("-fx-background-color: #fff");
 		this.setBottom(xAxis);
 		this.setLeft(yAxis);
-		this.setCenter(pane);
+
+		this.setCenter(chartScroll);
 	}
 	
 	public Chart getChart() {
