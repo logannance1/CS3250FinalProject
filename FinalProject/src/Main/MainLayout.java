@@ -9,6 +9,6 @@ public class MainLayout extends VBox {
 		ChartLayout cl = new ChartLayout();
 		VBox.setVgrow(cl, Priority.ALWAYS);
 		this.getChildren().add(cl);
-		this.getChildren().add(new DataForm(cl.getChart()));
+		this.getChildren().add(new DataForm(cl));
 	}
 }

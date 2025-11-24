@@ -11,6 +11,7 @@ public class ChartLayout extends BorderPane {
 	private XAxis xAxis;
 	private YAxis yAxis;
 	private Chart chart;
+	private ScrollPane scrollPane;
 	
 	/**
 	 * Creates a new MainLayout with a CandlestickChart
@@ -19,19 +20,23 @@ public class ChartLayout extends BorderPane {
 		xAxis = new XAxis();
 		yAxis = new YAxis();
 		chart = new CandleChart(xAxis, yAxis);
-		var chartScroll = new ScrollPane(chart);
-		chartScroll.setFitToHeight(true);
+		scrollPane = new ScrollPane(chart);
+		scrollPane.setFitToHeight(false);
 
-		chartScroll.setFitToWidth(false);
-		chartScroll.setPannable(true);
-		chartScroll.setStyle("-fx-background-color: #fff");
+		scrollPane.setFitToWidth(false);
+		scrollPane.setPannable(true);
+		scrollPane.setStyle("-fx-background-color: #fff");
 		this.setBottom(xAxis);
 		this.setLeft(yAxis);
 
-		this.setCenter(chartScroll);
+		this.setCenter(scrollPane);
 	}
 	
 	public Chart getChart() {
 		return chart;
+	}
+	
+	public ScrollPane getScrollPane() {
+		return scrollPane;
 	}
 }

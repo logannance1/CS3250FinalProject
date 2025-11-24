@@ -39,6 +39,7 @@ public class Candle {
 	 */
 	public void draw(CandleChart chart, double space, double x, double min, double scaleY) {
 		this.x = x;
+		min = 0;
 		
 		double width = space * .75;
 		double yHigh = chart.getHeight() - (datum.getHigh() - min) * scaleY;

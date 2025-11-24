@@ -1,7 +1,7 @@
 package data;
 import java.text.SimpleDateFormat;
 
-import chart.Chart;
+import chart.ChartLayout;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -12,9 +12,9 @@ public class DataForm extends VBox {
 	/**
 	 * Creates a form which allows the user to input a csv file path
 	 * along with start and end dates in order to update a chart
-	 * @param chart
+	 * @param chartLayout
 	 */
-	public DataForm(Chart chart) {
+	public DataForm(ChartLayout chartLayout) {
 		this.setPadding(new Insets(8));
 		
 		Label lblDataFile = new Label("Data File Path:");
@@ -38,7 +38,8 @@ public class DataForm extends VBox {
 			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 			
 			try {
-				chart.setTimeFrame(new TimeFrame(
+//				chartLayout.getScrollPane().requestLayout();
+				chartLayout.getChart().setTimeFrame(new TimeFrame(
 					format.parse(tfdStart.getText()),
 					format.parse(tfdEnd.getText()),
 					tfdDataFile.getText()

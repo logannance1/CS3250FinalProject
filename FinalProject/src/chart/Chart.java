@@ -3,6 +3,7 @@ import java.util.ArrayList;
 
 import data.TimeFrame;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Region;
 import misc.Indicator;
 
 public class Chart extends Pane {
@@ -18,6 +19,8 @@ public class Chart extends Pane {
 		this.xAxis = xAxis;
 		this.yAxis = yAxis;
 		this.setStyle("-fx-background-color: #fff");
+		this.setMinHeight(Region.USE_PREF_SIZE);
+		this.setMaxHeight(Region.USE_PREF_SIZE);
 	}
 	
 	public TimeFrame getTimeFrame() {

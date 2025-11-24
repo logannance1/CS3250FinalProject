@@ -50,9 +50,9 @@ public class CandleChart extends Chart {
 			candles.add(new Candle(fd));
 		}
 		
-		scale = (this.getHeight()) / (max - min);
+//		scale = (this.getHeight()) / (max - min);
+		scale = 128;
 		space = Math.max(MIN_SPACE, this.getWidth() / (candles.size() + 1));
-		System.out.println("Draw");
 		draw();
 	}
 	
