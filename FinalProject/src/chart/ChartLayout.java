@@ -3,6 +3,8 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.BorderPane;
 
@@ -23,6 +25,15 @@ public class ChartLayout extends BorderPane {
 		chart = new CandleChart();
 		outerGroup = new Group(chart);
 		scrollPane = new ScrollPane(outerGroup);
+		
+		this.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
+			if (event.isControlDown() && event.getCode() == KeyCode.DIGIT0) {
+				chart.setScaleX(1);
+				chart.setScaleY(1);
+				event.consume();	
+			}
+		});
+		
 		scrollPane.addEventFilter(ScrollEvent.SCROLL,
 			this::handleScroll);
 		
@@ -39,6 +50,7 @@ public class ChartLayout extends BorderPane {
 	}
 	
 	private void handleScroll(ScrollEvent event) {
+		this.requestFocus();
 		if (!event.isControlDown()) return;
 		double scale = chart.getScaleY();
 		double factor = event.getDeltaY() > 0 ? 1.1 : 0.9;
