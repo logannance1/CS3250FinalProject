@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import chart.ChartLayout;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
@@ -16,6 +17,8 @@ public class DataForm extends VBox {
 	 */
 	public DataForm(ChartLayout chartLayout) {
 		this.setPadding(new Insets(8));
+//		ComboBox<String> stocks = new ComboBox<>();
+//		stocks.getItems().add(getAccessibleHelp())
 		
 		Label lblDataFile = new Label("Data File Path:");
 		TextField tfdDataFile = new TextField();
@@ -38,7 +41,6 @@ public class DataForm extends VBox {
 			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 			
 			try {
-//				chartLayout.getScrollPane().requestLayout();
 				chartLayout.getChart().setTimeFrame(new TimeFrame(
 					format.parse(tfdStart.getText()),
 					format.parse(tfdEnd.getText()),

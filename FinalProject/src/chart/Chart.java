@@ -1,26 +1,26 @@
 package chart;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
+import data.FinanceDatum;
 import data.TimeFrame;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.Region;
+import javafx.geometry.Insets;
+import javafx.scene.Group;
+import javafx.scene.control.Label;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import misc.Indicator;
 
-public class Chart extends Pane {
+public class Chart extends Group {
 	private TimeFrame timeFrame;
 	private ArrayList<Indicator> indicators = new ArrayList<Indicator>();
-	protected XAxis xAxis;
-	protected YAxis yAxis;
-	
+	private VBox info;
+	protected double scale = 64;
 	/**
 	 * Creates a blank chart
 	 */
-	public Chart(XAxis xAxis, YAxis yAxis) {
-		this.xAxis = xAxis;
-		this.yAxis = yAxis;
-		this.setStyle("-fx-background-color: #fff");
-		this.setMinHeight(Region.USE_PREF_SIZE);
-		this.setMaxHeight(Region.USE_PREF_SIZE);
+	public Chart() {
+		this.setStyle("-fx-background-color: #f00");
 	}
 	
 	public TimeFrame getTimeFrame() {
@@ -33,8 +33,6 @@ public class Chart extends Pane {
 
 	public void setTimeFrame(TimeFrame timeFrame) {
 		this.timeFrame = timeFrame;
-		xAxis.getChildren().clear();
-		yAxis.getChildren().clear();
 	}
 
 	public ArrayList<Indicator> getIndicators() {
@@ -45,7 +43,54 @@ public class Chart extends Pane {
 		this.indicators.add(indicator);
 	}
 	
+	public VBox getInfo() {
+		return info;
+	}
+	
+	public void updateInfo(FinanceDatum datum, double x, double y) {
+		this.getChildren().remove(info);
+		info = new VBox();
+		info.setPrefSize(144, 144);
+		info.setPadding(new Insets(4));
+		info.setLayoutX(x);
+		info.setLayoutY(y - 144);
+		info.setStyle("-fx-background-color: #00f8");
+		info.setMouseTransparent(true);
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("EEE-MMM-yyyy");
+		Label date = new Label(sdf.format(datum.getDate()));
+		date.setStyle("-fx-text-fill: #eee");
+		
+		Label high = new Label("High: $" + datum.getHigh());
+		high.setStyle("-fx-text-fill: #eee");
+		
+		Label low = new Label("Low: $" + datum.getLow());
+		low.setStyle("-fx-text-fill: #eee");
+		
+		Label open = new Label("Open: $" + datum.getOpen());
+		open.setStyle("-fx-text-fill: #eee");
+		
+		Label close = new Label("Close: $" + datum.getClose());
+		close.setStyle("-fx-text-fill: #eee");
+		
+		info.getChildren().addAll(new StackPane(date), open, close, high, low);
+		this.getChildren().add(info);
+	}
+	
 	public boolean removeIndicator(Indicator indicator) {
 		return this.indicators.remove(indicator);
+	}
+	
+	public void incrementScale(double delta) {
+		if (delta == 0) {
+			return;
+		}
+		
+		var newScale = scale + delta;
+		
+		if (newScale > 0) {
+			scale = newScale;
+			draw();
+		}
 	}
 }
