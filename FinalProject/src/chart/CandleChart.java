@@ -5,6 +5,7 @@ import java.util.Date;
 
 import data.FinanceDatum;
 import data.TimeFrame;
+import javafx.application.Platform;
 import javafx.scene.control.Label;
 import javafx.scene.input.ScrollEvent;
 
@@ -30,13 +31,16 @@ public class CandleChart extends Chart {
 		candles = new ArrayList<Candle>(timeFrame.getData().size());
 		FinanceDatum fd = timeFrame.getData().get(0);
 		candles.add(new Candle(this, fd));
+		double wickHeight = Math.abs(fd.getHigh() - fd.getClose());
 		
 		for (int i = 1; i < timeFrame.getData().size(); ++i) {
 			fd = timeFrame.getData().get(i);
 			candles.add(new Candle(this, fd));
 		}
 		
-		scale = 128;	
+		
+		System.out.println(wickHeight);
+		scale = 32 / wickHeight;
 		space = 32;
 		draw();
 	}
