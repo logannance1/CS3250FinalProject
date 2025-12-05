@@ -12,8 +12,7 @@ import javafx.scene.input.ScrollEvent;
 public class CandleChart extends Chart {
 	private double space;
 	private ArrayList<Candle> candles;
-	private static final double MIN_SPACE = 32;
-
+	
 	public CandleChart() {
 		super();
 	}
@@ -29,17 +28,21 @@ public class CandleChart extends Chart {
 	public void setTimeFrame(TimeFrame timeFrame) {
 		super.setTimeFrame(timeFrame);
 		candles = new ArrayList<Candle>(timeFrame.getData().size());
+		
+		if (timeFrame.getData().size() == 0 || timeFrame.getBegin().after(timeFrame.getEnd())) {
+			this.getChildren().add(new Label("Insufficient data in that time frame"));
+			return;
+		}
+		
 		FinanceDatum fd = timeFrame.getData().get(0);
 		candles.add(new Candle(this, fd));
 		double wickHeight = Math.abs(fd.getHigh() - fd.getClose());
-		
+				
 		for (int i = 1; i < timeFrame.getData().size(); ++i) {
 			fd = timeFrame.getData().get(i);
 			candles.add(new Candle(this, fd));
 		}
 		
-		
-		System.out.println(wickHeight);
 		scale = 32 / wickHeight;
 		space = 32;
 		draw();

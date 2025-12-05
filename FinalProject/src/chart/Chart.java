@@ -32,6 +32,7 @@ public class Chart extends Group {
 	}
 
 	public void setTimeFrame(TimeFrame timeFrame) {
+		this.getChildren().clear();
 		this.timeFrame = timeFrame;
 	}
 
@@ -57,7 +58,7 @@ public class Chart extends Group {
 			"-fx-background-radius: 8");
 		
 		info.setMouseTransparent(true);
-		SimpleDateFormat sdf = new SimpleDateFormat("EEE-MMM-yyyy");
+		SimpleDateFormat sdf = new SimpleDateFormat("MMM-dd-yyyy");
 		Label date = new Label(sdf.format(datum.getDate()));
 		date.setStyle("-fx-text-fill: #eee;" +
 			"-fx-font-weight: bold");

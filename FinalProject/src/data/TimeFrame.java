@@ -13,13 +13,7 @@ public class TimeFrame {
 	private Date end;
 	private ArrayList<FinanceDatum> data;
 	
-	/**
-	 * Creates a new TimeFrame and loads the data from the file
-	 * given by the path
-	 * @param begin
-	 * @param end
-	 * @param path
-	 */
+
 	public TimeFrame(File file) {
 		loadData(file);
 	}
@@ -33,6 +27,13 @@ public class TimeFrame {
 		loadData(file, begin, end);
 	}
 	
+	/**
+	 * Creates a new TimeFrame and loads the data from the file
+	 * given by the path
+	 * @param file
+	 * @param begin
+	 * @param end
+	 */
 	public TimeFrame(File file, Date begin, Date end) {
 		this.begin = begin;
 		this.end = end;
@@ -97,13 +98,14 @@ public class TimeFrame {
 				data.add(day);
 			}
 			
-			Date date = this.begin;
+			Date lastDate = this.end;
 			
 			while ((row = reader.readNext()) != null) {
 				String dateStr = row[0];
-				date = format.parse(dateStr);
+				Date date = format.parse(dateStr);
 				
 				if (!date.after(this.end)) {
+					lastDate = date;
 					FinanceDatum day = new FinanceDatum(
 						date,
 						Double.parseDouble(row[1]),
@@ -115,7 +117,7 @@ public class TimeFrame {
 				}
 			}
 			
-			this.end = date;
+			this.end = lastDate;
         } catch (Exception e) {
         		e.printStackTrace();
         }
@@ -134,18 +136,28 @@ public class TimeFrame {
 			if (this.begin == null && (row = reader.readNext()) != null) {
 				String dateStr = row[0];
 				this.begin = format.parse(dateStr);
-				FinanceDatum day = new FinanceDatum(begin,
+
+				FinanceDatum day = new FinanceDatum(this.begin,
 					Double.parseDouble(row[1]), Double.parseDouble(row[2]),
 					Double.parseDouble(row[3]), Double.parseDouble(row[4]));
 				
 				data.add(day);
 			}
 			
+			if (this.begin.after(end)) {
+				Calendar cal = Calendar.getInstance();
+				cal.add(Calendar.YEAR, 1);
+				this.end = cal.getTime();
+			}
+			
+			Date lastDate = this.end;
+			
 			while ((row = reader.readNext()) != null) {
 				String dateStr = row[0];
 				Date date = format.parse(dateStr);
 				
-				if (!date.before(begin) && !date.after(end)) {
+				if (!date.before(this.begin) && !date.after(this.end)) {
+					lastDate = date;
 					FinanceDatum day = new FinanceDatum(
 						date,
 						Double.parseDouble(row[1]),
@@ -156,6 +168,8 @@ public class TimeFrame {
 					data.add(day);
 				}
 			}
+			
+			this.end = lastDate;
         } catch (Exception e) {
         		e.printStackTrace();
         }

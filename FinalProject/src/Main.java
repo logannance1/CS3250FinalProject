@@ -1,10 +1,4 @@
-/*
- * TODO
- * Maximum chart density.
- * Chart scrolling.
- * Y axis.
- * Ticker dropdowns
- */
+
 import Main.MainLayout;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -21,7 +15,7 @@ public class Main extends Application {
 		Scene scene = new Scene(new MainLayout(), 800, 600);
 		scene.getStylesheets().add("styles/style.css");
 		primaryStage.setScene(scene);
-		primaryStage.setTitle("Financial Visualizer");
+		primaryStage.setTitle("Stock Price History");
 		primaryStage.show();
 	}
 }

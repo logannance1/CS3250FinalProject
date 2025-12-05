@@ -4,22 +4,26 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
 
+import chart.Chart;
 import chart.ChartLayout;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
 
-public class DataForm extends VBox {
+public class DataForm extends HBox {
 	private ChartLayout chartLayout;
+	private Label lblStock;
 	private Button btnSelectDataFile;
 	private File dataFile;
 	private FileChooser fileChooser;
-	private DatePicker startDate;
-	private DatePicker endDate;
+	private LabelDatePicker startDate;
+	private LabelDatePicker endDate;
+	private Button btnUpdate;
 	private Label lblErr;
 	
 	/**
@@ -28,74 +32,93 @@ public class DataForm extends VBox {
 	 * @param chartLayout
 	 */
 	public DataForm(ChartLayout chartLayout) {
+		super(8);
 		this.chartLayout = chartLayout;
+		this.setAlignment(Pos.CENTER);
+		
+		lblStock = new Label();
 		btnSelectDataFile = new Button("Select File");
 		fileChooser = new FileChooser();
-		fileChooser.setTitle("Select Data Filey");
+		
+		fileChooser.setTitle("Select Data File");
 		fileChooser.setInitialDirectory(new File(
 			"C:\\Users\\Wolfg\\git\\CS3250FinalProject\\FinalProject\\data"));
 		
-		startDate = new DatePicker();
-		endDate = new DatePicker();
-		startDate.setDisable(true);
-		endDate.setDisable(true);
+		startDate = new LabelDatePicker("Start:");
+		endDate = new LabelDatePicker("End:");
+		lblErr = new Label();
 		
-		btnSelectDataFile.setOnAction(e -> {
-			this.dataFile = fileChooser.showOpenDialog(
-				this.getScene().getWindow());
-			
-			boolean good = dataFile != null;
-			
-			if (good) {
-				chartLayout.getChart().setTimeFrame(new TimeFrame(dataFile));				
-			}
-			
-			startDate.setDisable(!good);
-			endDate.setDisable(!good);
-		});
+		btnUpdate = new Button("Update");
+		btnUpdate.setOnAction(this::handleUpdateClick);
+		btnUpdate.setDisable(true);
 		
-		startDate.setOnAction(this::handleStartDateChange);
-		endDate.setOnAction(this::handleEndDateChange);
+		btnSelectDataFile.setOnAction(this::handleSelectDataFileClick);
 		this.setPadding(new Insets(8));
-		this.getChildren().addAll(btnSelectDataFile,
-			startDate, endDate);
-		
-//		Label lblDataFile = new Label("Data File Path:");
-//		TextField tfdDataFile = new TextField();
-//		tfdDataFile.setText("data/aapl.us.txt");
-//		tfdDataFile.setPromptText("data/aapl.us.txt");
-//		
-//		Label lblStart = new Label("Start Date (yyyy-mm-dd):");
-//		TextField tfdStart = new TextField();
-//		tfdStart.setText("2000-01-01");
-//		tfdStart.setPromptText("2000-01-01");
-//		
-//		Label lblEnd = new Label("End Date (yyyy-mm-dd):");
-//		TextField tfdEnd = new TextField();
-//		tfdEnd.setText("2000-02-01");
-//		tfdEnd.setPromptText("2000-02-01");
-//		
-//		btnUpdate = new Button("Update");
-//		
-//		btnUpdate.setOnAction(e -> {
-//			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-//			
-//			try {				
-//				chartLayout.getChart().setTimeFrame(new TimeFrame(
-//					format.parse(tfdStart.getText()),
-//					format.parse(tfdEnd.getText()),
-//					tfdDataFile.getText()
-//				));
-//			} catch (Exception ex) {
-//				ex.printStackTrace();
-//			}
-//		});
-//		
-//		this.getChildren().addAll(lblDataFile, tfdDataFile, lblStart, tfdStart,
-//			lblEnd, tfdEnd, btnUpdate);
+		this.getChildren().addAll(lblStock, btnSelectDataFile,
+			startDate, endDate, btnUpdate, lblErr);
 	}
 	
-	private void handleStartDateChange(ActionEvent e) {		
+	private void handleUpdateClick(ActionEvent e) {		
+		DatePicker startDate = this.startDate.getDatePicker();
+		DatePicker endDate = this.endDate.getDatePicker();
+		LocalDate startVal = startDate.getValue();
+		LocalDate endVal = endDate.getValue();
+		Chart chart = this.chartLayout.getChart();
+		
+		if (endVal == null) {
+			this.lblErr.setVisible(false);
+			
+			if (startVal == null) {
+				chart.setTimeFrame(new TimeFrame(dataFile));
+				startDate.setValue(fromDate(chart.getTimeFrame().getBegin()));
+				endDate.setValue(fromDate(chart.getTimeFrame().getEnd()));
+				return;
+			}
+						
+			chart.setTimeFrame(new TimeFrame(
+				dataFile, fromLocalDate(startVal)));
+			
+			startDate.setValue(fromDate(chart.getTimeFrame().getBegin()));
+			endDate.setValue(fromDate(chart.getTimeFrame().getEnd()));
+			return;
+		}
+		
+		if (startVal == null) {
+			this.lblErr.setVisible(false);
+			chart.setTimeFrame(new TimeFrame(dataFile, null,
+				fromLocalDate(endVal)));
+			
+			startDate.setValue(fromDate(chart.getTimeFrame().getBegin()));
+			endDate.setValue(fromDate(chart.getTimeFrame().getEnd()));
+			return;
+		}
+		
+		this.lblErr.setVisible(false);
+		chart.setTimeFrame(new TimeFrame(
+			dataFile, fromLocalDate(startVal),
+			fromLocalDate(endVal)));
+		
+		startDate.setValue(fromDate(chart.getTimeFrame().getBegin()));
+		endDate.setValue(fromDate(chart.getTimeFrame().getEnd()));
+	}
+	
+	private void handleSelectDataFileClick(ActionEvent e) {
+		this.dataFile = fileChooser.showOpenDialog(
+				this.getScene().getWindow());
+		
+		if (this.dataFile != null) {
+			var name = dataFile.getName();
+			name = name.split("\\.")[0];
+			lblStock.setText(name);
+		}
+		
+		btnUpdate.setDisable(this.dataFile == null);
+	}
+	
+	private void handleStartDateChange(ActionEvent e) {
+		DatePicker startDate = this.startDate.getDatePicker();
+		DatePicker endDate = this.endDate.getDatePicker();
+		
 		if (endDate.getValue() == null) {
 			this.chartLayout.getChart().setTimeFrame(new TimeFrame(
 				dataFile, fromLocalDate(startDate.getValue())));
@@ -103,20 +126,46 @@ public class DataForm extends VBox {
 		}
 		
 		if (startDate.getValue().isAfter(endDate.getValue())) {
-			this.lblErr = new Label("Start date must not be after end " +
+			this.lblErr.setText("Start date must not be after end " +
 				"date!");
 			
-			this.getChildren().add(this.lblErr);
+			this.lblErr.setVisible(true);
 			return;
 		}
 		
+		this.lblErr.setVisible(false);
 		chartLayout.getChart().setTimeFrame(new TimeFrame(
 			dataFile, fromLocalDate(startDate.getValue()),
 			fromLocalDate(endDate.getValue())));
 	}
 	
 	private void handleEndDateChange(ActionEvent e) {
+		DatePicker startDate = this.startDate.getDatePicker();
+		DatePicker endDate = this.endDate.getDatePicker();
 		
+		if (startDate.getValue() == null) {
+			this.chartLayout.getChart().setTimeFrame(new TimeFrame(
+				dataFile, null, fromLocalDate(endDate.getValue())));
+			return;
+		}
+		
+		if (startDate.getValue().isAfter(endDate.getValue())) {
+			this.lblErr.setText("Start date must not be after end " +
+					"date!");
+				
+			this.lblErr.setVisible(true);
+			return;
+		}
+		
+		this.lblErr.setVisible(false);
+		chartLayout.getChart().setTimeFrame(new TimeFrame(
+			dataFile, fromLocalDate(startDate.getValue()),
+			fromLocalDate(endDate.getValue())));
+	}
+	
+	private LocalDate fromDate(Date date) {
+		return date.toInstant().atZone(ZoneId.systemDefault())
+			.toLocalDate();
 	}
 	
 	private Date fromLocalDate(LocalDate date) {
